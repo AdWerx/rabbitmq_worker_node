@@ -1,6 +1,12 @@
-# rabbitmq_worker_node
+# rabbitmq-worker
 
 This library provides a high-level API for consuming messages from a rabbitmq exchange with sidekiq-like behavior.
+
+## Installation
+
+```
+npm install -S @adwerx/rabbitmq-worker amqplib
+```
 
 ## Quickstart
 
@@ -65,10 +71,6 @@ interface WorkerOptions {
 }
 ```
 
-## Retries
-
-Jobs retry a default of 25 times with an exponential backoff. When all retries are exhausted, the job is sent to the dead queue.
-
 ## Design
 
 This library prioritizes a simple convention over configuration. A worker will assert the exchange it intends to bind a queue to, a work queue to hold its messages, a binding between these two, a retry queue to hold messages awaiting retry, a dead queue to hold messages that have exhausted retries, a requeue exchange, and a binding between the requeue exchange and the work queue to automatically requeue messages that have waited their retry period.
@@ -97,6 +99,8 @@ await new Worker()
 The worker defined above will create a work queue named `provisioning`. A queue to contain retryable messages is created named `provisioning.retry`. A queue to hold dead messages is created named `provisioning.dead`. An `provisioning.requeue` exchange is created in order to re-queue messages that wait their retry period. The `orders` exchange will be bound to the `provisioning` work queue. The `provisioning.requeue` exchange will be bound to the `provisioning` work queue.
 
 ### How retries work
+
+Jobs retry a default of 25 times with an exponential backoff. When all retries are exhausted, the job is sent to the dead queue.
 
 When a message is delivered to the worker,
 and the perform function is successful,

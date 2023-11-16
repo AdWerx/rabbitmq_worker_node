@@ -1,5 +1,5 @@
 {
-  "name": "rabbitmq_worker_node",
+  "name": "@adwerx/rabbitmq-worker",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "prepublish": "npm run test && npm run build"
   },
   "engines": {
     "node": ">=18"
